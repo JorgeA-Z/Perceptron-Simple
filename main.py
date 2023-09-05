@@ -5,12 +5,18 @@ import matplotlib.pyplot as plt
 
 if __name__ == "__main__":
 
-    a = automata.Automata("OR_trn.csv");
-    b = automata.Automata("OR_tst.csv");
+    a = automata.Automata("XOR_trn.csv");
+    b = automata.Automata("XOR_tst.csv");
 
     # Datos de entrenamiento y prueba (XOR)
     training_data, training_labels = a.data()
     test_data, test_labels = b.data()
+
+
+    print("Training data and training labels")
+    print(training_data, training_labels)
+    print("Test data and Test labels")
+    print(test_data, test_labels)
 
     # Crea un perceptrón con 2 entradas (para el operador XOR)
     p = perceptron.perceptron(num_inputs=2, learning_rate=0.1, epochs=100)
@@ -19,12 +25,20 @@ if __name__ == "__main__":
     p.train(training_data, training_labels)
 
     # Prueba el perceptrón
+    correct_predictions = 0
+    total_predictions = len(test_data)
+
     predicted_labels = []
 
-    for inputs in test_data:
+    for inputs, label in zip(test_data, test_labels):
         prediction = p.predict(inputs)
         predicted_labels.append(prediction)
         print(f"Entradas: {inputs}, Predicción: {prediction}")
+        if prediction == label:
+            correct_predictions += 1
+
+    accuracy = correct_predictions / total_predictions
+    print(f"Precisión en el conjunto de prueba: {accuracy * 100:.2f}%")
 
 
     x_min, x_max = -1.5, 1.5
